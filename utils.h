@@ -42,11 +42,6 @@ void _hook_on_prepare_data(JsonObject * root) {
 
 };
 
-// // // INIT
-
-
-
-
 void _constructor() {
   JsonObject& _r = jsonRootBuffer.createObject();
   JsonObject& _info = _r.createNestedObject("info");
@@ -56,32 +51,15 @@ void _constructor() {
   _info["flash_size"] = ESP.getFlashChipSize();
   _info["flash_id"] = String(ESP.getFlashChipId(), HEX);
   _info["chip_id"] = String(ESP.getChipId(), HEX);
-  _info["sdk"] = system_get_sdk_version();
+  _info["mac"] = String(WiFi.macAddress().c_str());
+  _info["core"] =  String(ESP.getCoreVersion().c_str());
+  _info["sdk"] = String(ESP.getSdkVersion());
 
   _r["info"] = _info;
   _r["d"] = _d;
 
   cmmc_root = &_r;
   cmmc_info = &_info;
-}
-
-void init_hardware() {
-  Serial.begin(115200);
-  Serial.println("Starting...");
-}
-
-
-void init_wifi() {
-  if (WiFi.begin(ssid, password)) {
-    while (WiFi.status() != WL_CONNECTED) {
-      delay(500);
-      Serial.print(".");
-    }
-  }
-
-  Serial.println("WiFi connected");
-  Serial.println("IP address: ");
-  Serial.println(WiFi.localIP());
 }
 
 void init_netpie() {
@@ -104,7 +82,8 @@ void _publish() {
   strcpy(jsonStrbuffer, "");
   cmmc_root->printTo(jsonStrbuffer, sizeof(jsonStrbuffer));
   Serial.println(jsonStrbuffer);
-  microgear.chat(CHAT_WITH, jsonStrbuffer);
+  String topic = String("/gearname/") + ALIAS + String("/status");
+  microgear.publish(const_cast<char*>(topic.c_str()), jsonStrbuffer);
 }
 
 void microgear_loop() {
