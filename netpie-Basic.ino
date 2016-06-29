@@ -19,7 +19,7 @@ const char* password = "espertap";
 #define KEY         "v4MC7hEMyje06Mi"
 #define SECRET      "OZAJGnT21uLcmigeDXLNK2l6W"
 
-#define ALIAS       "esp8266gear2"
+#define ALIAS       "plug001"
 #define CHAT_WITH   "htmlgear2"
 #define PUBLISH_EVERY (2*1000)
 
@@ -49,7 +49,8 @@ void init_wifi();
 
 void init_hardware() {
   Serial.begin(115200);
-  pinMode(LED_BUILTIN, OUTPUT);
+  pinMode(15, OUTPUT);
+  pinMode(LED_BUILTIN, OUTPUT);  
   Serial.println("Starting...");
 }
 

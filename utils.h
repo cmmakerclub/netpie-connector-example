@@ -76,13 +76,14 @@ void init_netpie() {
 }
 
 void _publish() {
+  String topic = String("/gearname/") + ALIAS + String("/status");
   _hook_on_prepare_data(cmmc_root);
   on_prepare_data(cmmc_root);
-  Serial.printf("[%lu] Publish to %s ... \r\n", millis(), CHAT_WITH);
+  Serial.printf("[%lu] Publish to %s ... \r\n", millis(), topic.c_str());
   strcpy(jsonStrbuffer, "");
   cmmc_root->printTo(jsonStrbuffer, sizeof(jsonStrbuffer));
   Serial.println(jsonStrbuffer);
-  String topic = String("/gearname/") + ALIAS + String("/status");
+  
   microgear.publish(const_cast<char*>(topic.c_str()), jsonStrbuffer);
 }
 
