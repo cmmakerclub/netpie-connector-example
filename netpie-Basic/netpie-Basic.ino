@@ -15,11 +15,10 @@ const char* ssid     = "ESPERT-002";
 const char* password = "espertap";
 
 
-#define APPID               "HelloCMMC"
-#define KEY                 ""
-#define SECRET              ""
-
-#define ALIAS               "plug001"
+#define APPID        "HelloCMMC"
+#define KEY          ""
+#define SECRET       ""
+#define ALIAS        "plug001"
 
 #define PUBLISH_EVERY_SECS (2*1000)
 
