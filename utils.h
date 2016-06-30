@@ -86,17 +86,3 @@ void _publish() {
   
   microgear.publish(const_cast<char*>(topic.c_str()), jsonStrbuffer);
 }
-
-void microgear_loop() {
-  if (microgear.connected()) {
-    microgear.loop();
-    timer001.every_ms(PUBLISH_EVERY, []() {
-      Serial.println("ON DUTY: ");
-      _publish();
-    });
-  }
-  else {
-    Serial.println("connection lost, reconnect...");
-    microgear.connect(APPID);
-  }
-}

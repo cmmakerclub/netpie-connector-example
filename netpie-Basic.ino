@@ -15,18 +15,19 @@ const char* ssid     = "ESPERT-002";
 const char* password = "espertap";
 
 
-#define APPID       "HelloCMMC"
-#define KEY         "v4MC7hEMyje06Mi"
-#define SECRET      "OZAJGnT21uLcmigeDXLNK2l6W"
+#define APPID               "HelloCMMC"
+#define KEY                 ""
+#define SECRET              ""
 
-#define ALIAS       "plug001"
-#define CHAT_WITH   "htmlgear2"
-#define PUBLISH_EVERY (2*1000)
+#define ALIAS               "plug001"
+
+#define PUBLISH_EVERY_SECS (2*1000)
 
 
 WiFiClient client;
 AuthClient *authclient;
 CMMC_Interval timer001;
+CMMC_Interval timer002;
 
 // MQTT CONNECTOR CONCEPT
 char jsonStrbuffer[1024];
@@ -46,6 +47,7 @@ MicroGear microgear(client);
 #include "utils.h"
 
 void init_wifi();
+void microgear_loop();
 
 void init_hardware() {
   Serial.begin(115200);
@@ -63,9 +65,20 @@ void setup() {
 
 void loop() {
   microgear_loop();
-  delay(100);
 }
 
+void microgear_loop() {
+  if (microgear.connected()) {
+    microgear.loop();
+    timer001.every_ms(PUBLISH_EVERY_SECS, [&]() {
+      _publish();
+    });
+  }
+  else {
+    Serial.println("connection lost, reconnect...");
+    microgear.connect(APPID);
+  }
+}
 
 void init_wifi() {
   if (WiFi.begin(ssid, password)) {
